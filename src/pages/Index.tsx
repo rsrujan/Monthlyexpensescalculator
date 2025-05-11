@@ -11,6 +11,7 @@ import { generateCalendarDays } from '@/lib/date-utils';
 import { Expense, ExpenseFormData } from '@/types';
 import * as expenseService from '@/services/expenseService';
 import { useToast } from '@/hooks/use-toast';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const Index = () => {
   const { toast } = useToast();
@@ -170,7 +171,10 @@ const Index = () => {
   
   return (
     <div className="container mx-auto p-4 pb-20">
-      <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Monthly Expenses Tracker</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Monthly Expenses Tracker</h1>
+        <ThemeToggle />
+      </div>
       
       {/* Month navigation */}
       <MonthNavigation
