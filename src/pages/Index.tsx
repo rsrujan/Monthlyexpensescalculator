@@ -42,7 +42,7 @@ const Index = () => {
       queryClient.invalidateQueries({ 
         queryKey: ['expenses', currentMonth.getFullYear(), currentMonth.getMonth()] 
       });
-      toast({ title: "Expense added successfully", variant: "success" });
+      toast({ title: "Expense added successfully" });
     },
     onError: (error) => {
       toast({ 
@@ -59,7 +59,7 @@ const Index = () => {
       queryClient.invalidateQueries({ 
         queryKey: ['expenses', currentMonth.getFullYear(), currentMonth.getMonth()] 
       });
-      toast({ title: "Expense updated successfully", variant: "success" });
+      toast({ title: "Expense updated successfully" });
     },
     onError: (error) => {
       toast({ 
@@ -76,7 +76,7 @@ const Index = () => {
       queryClient.invalidateQueries({ 
         queryKey: ['expenses', currentMonth.getFullYear(), currentMonth.getMonth()] 
       });
-      toast({ title: "Expense deleted successfully", variant: "success" });
+      toast({ title: "Expense deleted successfully" });
     },
     onError: (error) => {
       toast({ 
@@ -170,7 +170,7 @@ const Index = () => {
   
   return (
     <div className="container mx-auto p-4 pb-20">
-      <h1 className="text-3xl font-bold text-center mb-8">Monthly Expenses Tracker</h1>
+      <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Monthly Expenses Tracker</h1>
       
       {/* Month navigation */}
       <MonthNavigation
@@ -184,7 +184,7 @@ const Index = () => {
       
       {/* Quick add expense button */}
       <div className="flex justify-end mb-6">
-        <Button onClick={() => handleAddExpense()}>
+        <Button onClick={() => handleAddExpense()} className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
           <Plus size={18} className="mr-1" /> Add New Expense
         </Button>
       </div>

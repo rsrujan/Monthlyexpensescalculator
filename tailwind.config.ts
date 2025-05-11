@@ -108,6 +108,11 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out'
+			},
+			backgroundImage: {
+				'gradient-card': 'linear-gradient(to right, #e6b980 0%, #eacda3 100%)',
+				'gradient-summary': 'linear-gradient(to right, #accbee 0%, #e7f0fd 100%)',
+				'gradient-primary': 'linear-gradient(to right, #4FB0AE 0%, #8F95D3 100%)',
 			}
 		}
 	},
