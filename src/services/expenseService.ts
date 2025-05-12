@@ -1,4 +1,3 @@
-
 import { Expense, ExpenseFormData } from '@/types';
 import { supabase } from '@/lib/supabase';
 
@@ -10,26 +9,41 @@ const mapToExpense = (expense: any): Expense => {
   };
 };
 
+// Check if Supabase is properly initialized
+const isSupabaseAvailable = () => {
+  try {
+    // Check if supabase is available and has a URL
+    return supabase && supabase.from !== undefined;
+  } catch (error) {
+    console.error('Supabase is not properly initialized:', error);
+    return false;
+  }
+};
+
 export const getExpensesByMonth = async (year: number, month: number): Promise<Expense[]> => {
   try {
-    // Calculate the start and end dates for the month
-    const startDate = new Date(year, month, 1).toISOString().split('T')[0];
-    const endDate = new Date(year, month + 1, 0).toISOString().split('T')[0];
-    
-    const { data, error } = await supabase
-      .from('expenses')
-      .select('*')
-      .gte('date', startDate)
-      .lte('date', endDate)
-      .order('date', { ascending: true });
+    // Check if Supabase is available
+    if (isSupabaseAvailable()) {
+      // Calculate the start and end dates for the month
+      const startDate = new Date(year, month, 1).toISOString().split('T')[0];
+      const endDate = new Date(year, month + 1, 0).toISOString().split('T')[0];
       
-    if (error) {
-      console.error('Error fetching expenses:', error);
-      throw error;
+      const { data, error } = await supabase
+        .from('expenses')
+        .select('*')
+        .gte('date', startDate)
+        .lte('date', endDate)
+        .order('date', { ascending: true });
+        
+      if (error) {
+        throw error;
+      }
+      
+      // Map the data to our Expense type
+      return (data || []).map(mapToExpense);
+    } else {
+      throw new Error('Supabase is not available');
     }
-    
-    // Map the data to our Expense type
-    return (data || []).map(mapToExpense);
   } catch (error) {
     console.error('Failed to get expenses by month', error);
     
@@ -56,21 +70,26 @@ export const getExpensesByMonth = async (year: number, month: number): Promise<E
 
 export const addExpense = async (expenseData: ExpenseFormData): Promise<Expense> => {
   try {
-    const newExpense = {
-      ...expenseData,
-      id: expenseData.id || crypto.randomUUID(),
-      date: expenseData.date.toISOString().split('T')[0],
-    };
-    
-    const { data, error } = await supabase
-      .from('expenses')
-      .insert([newExpense])
-      .select()
-      .single();
+    // Check if Supabase is available
+    if (isSupabaseAvailable()) {
+      const newExpense = {
+        ...expenseData,
+        id: expenseData.id || crypto.randomUUID(),
+        date: expenseData.date.toISOString().split('T')[0],
+      };
       
-    if (error) throw error;
-    
-    return mapToExpense(data);
+      const { data, error } = await supabase
+        .from('expenses')
+        .insert([newExpense])
+        .select()
+        .single();
+        
+      if (error) throw error;
+      
+      return mapToExpense(data);
+    } else {
+      throw new Error('Supabase is not available');
+    }
   } catch (error) {
     console.error('Failed to add expense', error);
     
@@ -92,21 +111,26 @@ export const addExpense = async (expenseData: ExpenseFormData): Promise<Expense>
 
 export const updateExpense = async (expenseData: ExpenseFormData): Promise<Expense> => {
   try {
-    const updatedExpense = {
-      ...expenseData,
-      date: expenseData.date.toISOString().split('T')[0],
-    };
-    
-    const { data, error } = await supabase
-      .from('expenses')
-      .update(updatedExpense)
-      .eq('id', expenseData.id)
-      .select()
-      .single();
+    // Check if Supabase is available
+    if (isSupabaseAvailable()) {
+      const updatedExpense = {
+        ...expenseData,
+        date: expenseData.date.toISOString().split('T')[0],
+      };
       
-    if (error) throw error;
-    
-    return mapToExpense(data);
+      const { data, error } = await supabase
+        .from('expenses')
+        .update(updatedExpense)
+        .eq('id', expenseData.id)
+        .select()
+        .single();
+        
+      if (error) throw error;
+      
+      return mapToExpense(data);
+    } else {
+      throw new Error('Supabase is not available');
+    }
   } catch (error) {
     console.error('Failed to update expense', error);
     
@@ -127,12 +151,17 @@ export const updateExpense = async (expenseData: ExpenseFormData): Promise<Expen
 
 export const deleteExpense = async (id: string): Promise<void> => {
   try {
-    const { error } = await supabase
-      .from('expenses')
-      .delete()
-      .eq('id', id);
-      
-    if (error) throw error;
+    // Check if Supabase is available
+    if (isSupabaseAvailable()) {
+      const { error } = await supabase
+        .from('expenses')
+        .delete()
+        .eq('id', id);
+        
+      if (error) throw error;
+    } else {
+      throw new Error('Supabase is not available');
+    }
   } catch (error) {
     console.error('Failed to delete expense', error);
     
